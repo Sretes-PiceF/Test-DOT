@@ -46,5 +46,8 @@ model TokenBlacklist {
   id        String   @id @default(cuid())
   token     String   @unique
   expiresAt DateTime
+  reason    String?  @default("MANUAL_LOGOUT") // Tambahkan field reason
   createdAt DateTime @default(now())
+
+  @@index([expiresAt]) // Tambahkan index untuk performa cleanup
 }

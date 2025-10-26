@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
         console.log('=== LOGIN PROCESS START ===');
         console.log('Login attempt for email:', email);
 
-        // ✅ Validasi input
+        // Validasi input
         if (!email || !password) {
             return NextResponse.json(
                 { success: false, message: 'Email and password are required' },
@@ -17,13 +17,13 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // ✅ Cari user berdasarkan email
+        // Cari user berdasarkan email
         const user = await prisma.user.findUnique({
             where: { email: email.toLowerCase().trim() },
         });
 
         if (!user) {
-            console.log('❌ User not found');
+            console.log('User not found');
             return NextResponse.json(
                 { success: false, message: 'Invalid email or password' },
                 { status: 401 }
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
         console.log('User found:', user.email);
 
-        // ✅ Verifikasi password
+        // Verifikasi password
         const isPasswordValid = await verifyPassword(password, user.password);
         if (!isPasswordValid) {
             console.log('Password mismatch');
@@ -42,12 +42,10 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        console.log('✅ Password verified');
-
-        // ✅ Generate JWT token (gunakan user.id dan user.email sesuai fungsi baru)
+        // Generate JWT token (gunakan user.id dan user.email sesuai fungsi baru)
         const token = await generateToken(user.id, user.email);
 
-        // ✅ Kirim response
+        // Kirim response
         return NextResponse.json({
             success: true,
             message: 'Login successful',
