@@ -1,8 +1,25 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3001);
-}
-bootstrap();
+// Modules
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ProductModule } from './product/product.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot(),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '24h' },
+    }),
+    AuthModule,
+    UserModule,
+    CategoriesModule,
+    ProductModule,
+  ],
+})
+export class AppModule { }
