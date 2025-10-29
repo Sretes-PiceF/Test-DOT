@@ -12,43 +12,28 @@ import {
 import { ProductsService } from './product.service';
 import { JwtAuthGuard } from '../core/guards/jwt.guard';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto'; // harus dibuat
-import { GetProductDto } from './dto/get-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { GetProductDto } from './dto/get-product.dto'; // Akan dimodifikasi
 
 @Controller('Product')
 @UseGuards(JwtAuthGuard)
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) { }
 
-    // GET /Product?page=1&limit=10&search=abc
+    // GET /Product?search=abc
     @Get()
     async getProduct(@Query() query: GetProductDto) {
-        const page = Number(query.page) || 1;
-        const limit = Number(query.limit) || 10;
+        // HANYA ambil 'search'
         const search = query.search || '';
 
-        const { products, total } = await this.productsService.getProduct(
-            page,
-            limit,
-            search,
-        );
-
-        const totalPages = Math.ceil(total / limit);
+        // Panggil service TANPA page dan limit. Service akan mengembalikan SEMUA produk.
+        const products = await this.productsService.getAllProduct(search);
+        // Nama method service diubah menjadi getAllProducts agar lebih jelas
 
         return {
             success: true,
-            message: 'Products retrieved successfully',
-            data: {
-                products,
-                pagination: {
-                    page,
-                    limit,
-                    total,
-                    totalPages,
-                    hasNext: page < totalPages,
-                    hasPrev: page > 1,
-                },
-            },
+            message: 'All products retrieved successfully',
+            data: products,
         };
     }
 

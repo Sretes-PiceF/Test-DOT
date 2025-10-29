@@ -8,8 +8,7 @@ export class ProductsService {
     constructor(private prisma: PrismaService) { }
 
     // GET /Product?page=&limit=&search=
-    async getProduct(page: number, limit: number, search: string) {
-        const skip = (page - 1) * limit;
+    async getAllProduct(search: string) {
 
         const [products, total] = await Promise.all([
             this.prisma.product.findMany({
@@ -22,8 +21,6 @@ export class ProductsService {
                 include: {
                     categories: true, // tampilkan relasi kategori
                 },
-                skip,
-                take: limit,
                 orderBy: {
                     createdAt: 'desc',
                 },

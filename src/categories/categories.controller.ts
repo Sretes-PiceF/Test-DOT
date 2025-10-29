@@ -23,31 +23,15 @@ export class CategoriesController {
     // GET /products?page=1&limit=10&search=abc
     @Get()
     async getCategories(@Query() query: GetCategoriesDto) {
-        const page = Number(query.page) || 1;
-        const limit = Number(query.limit) || 10;
         const search = query.search || '';
 
-        const { categories, total } = await this.categoriesService.getCategories(
-            page,
-            limit,
-            search,
-        );
-
-        const totalPages = Math.ceil(total / limit);
+        const { categories } = await this.categoriesService.getAllCategories(search);
 
         return {
             success: true,
             message: 'Categories retrieved successfully',
             data: {
                 categories,
-                pagination: {
-                    page,
-                    limit,
-                    total,
-                    totalPages,
-                    hasNext: page < totalPages,
-                    hasPrev: page > 1,
-                },
             },
         };
     }

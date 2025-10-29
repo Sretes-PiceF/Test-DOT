@@ -7,8 +7,7 @@ import { UpdateCategoriesDto } from './dto/update-categories.dto';
 export class CategoriesService {
     constructor(private prisma: PrismaService) { }
 
-    async getCategories(page: number, limit: number, search: string) {
-        const skip = (page - 1) * limit;
+    async getAllCategories(search: string) {
 
         const [categories, total] = await Promise.all([
             this.prisma.categories.findMany({
@@ -18,8 +17,6 @@ export class CategoriesService {
                         mode: 'insensitive',
                     },
                 },
-                skip,
-                take: limit,
                 orderBy: {
                     createdAt: 'desc',
                 },

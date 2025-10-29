@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
 import request from 'supertest';
+import { AppModule } from '../src/app.module';
+import { PrismaService } from '../src/core/prisma.service';
 
-describe('Auth E2E', () => {
+describe('Auth E2E Tests', () => {
     let app: INestApplication;
-    let server: any;
+    let prisma: PrismaService;
 
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -13,37 +14,97 @@ describe('Auth E2E', () => {
         }).compile();
 
         app = moduleFixture.createNestApplication();
+        prisma = moduleFixture.get<PrismaService>(PrismaService);
         await app.init();
-        server = app.getHttpServer();
+
+        // Bersihkan tabel User sebelum menjalankan tes Auth
+        await prisma.user.deleteMany();
     });
 
     afterAll(async () => {
+        // **PERBAIKAN: Hapus user setelah tes selesai**
+        await prisma.user.deleteMany();
         await app.close();
     });
 
-    it('✅ should login successfully and return access token', async () => {
-        const loginPayload = {
-            email: 'vino@gmail.com', // PASTIKAN ini akun valid di DB testing
-            password: 'Wow Besar ye',      // PASTIKAN ini password yang benar
+    describe('Pengujian Token', () => {
+        let accessToken: string;
+        // Gunakan user unik untuk memastikan tidak ada konflik dengan suite lain
+        const testUser = {
+            name: 'Auth Test User',
+            email: 'auth.test@example.com',
+            password: 'password123',
         };
 
-        const res = await request(server)
-            .post('/auth/login')
-            .send(loginPayload);
+        it('Harus mendaftar pengguna baru', async () => {
+            const response = await request(app.getHttpServer())
+                .post('/auth/register')
+                .send(testUser)
+                .expect(201);
 
-        // --- DEBUGGING CRITICAL ---
-        if (res.status === 400) {
-            console.log('--- 400 BAD REQUEST DETAILS ---');
-            console.log('Payload yang dikirim:', loginPayload);
-            console.log('Respons Body dari Server:', res.body);
-            console.log('-------------------------------');
-        }
-        // ---------------------------
+            expect(response.body.message).toBe('User registered successfully');
+        });
 
-        expect(res.status).toBe(201); // Atau 200, tergantung implementasi Anda
-        expect(res.body.access_token).toBeDefined();
+        it('Login untuk mendapatkan token', async () => {
+            const response = await request(app.getHttpServer())
+                .post('/auth/login')
+                .send({
+                    email: testUser.email,
+                    password: testUser.password,
+                })
+                .expect(201);
 
-        // Optional: simpan token untuk test berikutnya
-        // console.log('Access Token:', res.body.access_token);
+            expect(response.body.access_token).toBeDefined();
+            accessToken = response.body.access_token;
+        });
+
+        it('Mengakses produk dengan token yang valid', async () => {
+            const response = await request(app.getHttpServer())
+                .get('/Product') // Ganti dengan protected route Anda
+                .set('Authorization', `Bearer ${accessToken}`)
+
+            expect(response.body).toBeDefined();
+        });
+
+        it('Menolak akses tanpa token', async () => {
+            await request(app.getHttpServer())
+                .get('/Product')
+                .expect(401);
+        });
+
+        it('Menolak akses dengan token yang tidak valid', async () => {
+            await request(app.getHttpServer())
+                .get('/Product')
+                .set('Authorization', 'Bearer invalid-token-here')
+                .expect(401);
+        });
+
+        it('Logout sukses', async () => {
+            const response = await request(app.getHttpServer())
+                .post('/auth/logout')
+                .set('Authorization', `Bearer ${accessToken}`)
+                .send({ reason: 'TEST_LOGOUT' })
+                .expect(201);
+
+            expect(response.body.message).toBe('Logout successful');
+        });
+
+        it('Menolak akses karena Token telah masuk daftar blaclist di database', async () => {
+            await request(app.getHttpServer())
+                .get('/Product')
+                .set('Authorization', `Bearer ${accessToken}`)
+                .expect(401); // Should be rejected because token is blacklisted
+        });
+
+        it('Menolak login dengan kredensial yang salah', async () => {
+            await request(app.getHttpServer())
+                .post('/auth/Login')
+                .send({
+                    email: 'test@example.com',
+                    password: 'wrongpassword'
+                })
+                .expect(400);
+        });
+
     });
 });
