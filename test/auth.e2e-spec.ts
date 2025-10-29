@@ -24,7 +24,7 @@ describe('Auth E2E', () => {
     it('✅ should login successfully and return access token', async () => {
         const loginPayload = {
             email: 'vino@gmail.com', // PASTIKAN ini akun valid di DB testing
-            password: 'Vinoaja',      // PASTIKAN ini password yang benar
+            password: 'Wow Besar ye',      // PASTIKAN ini password yang benar
         };
 
         const res = await request(server)
