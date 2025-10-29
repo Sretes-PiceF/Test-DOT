@@ -1,20 +1,31 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PassportStrategy } from '@nestjs/passport';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor() {
+    constructor(private authService: AuthService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: process.env.JWT_SECRET || 'secret_key',
+            ignoreExpiration: false,
+            secretOrKey: process.env.JWT_SECRET as string,
+            passReqToCallback: true,
         });
     }
 
-    async validate(payload: any) {
-        if (!payload || !payload.sub) {
-            throw new UnauthorizedException('Invalid token');
+    async validate(req: any, payload: any) {
+        const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+
+        // Cek apakah token di blacklist
+        const isValid = await this.authService.validateToken(token as string);
+        if (!isValid) {
+            throw new UnauthorizedException('Token is invalid or blacklisted');
         }
-        return payload;
+
+        return {
+            userId: payload.userId,
+            email: payload.email
+        };
     }
 }

@@ -1,4 +1,4 @@
-import { Categories } from '../../categories/entities/categories.entity';
+import { Categories } from './../../categories/entities/category.entity';
 
 export class ProductEntity {
     product_id: number;
@@ -6,7 +6,7 @@ export class ProductEntity {
     product_price: number;
     product_stock: number;
     categories_id: number;
-    category?: Categories;
+    Categories?: Categories;
     createdAt: Date;
     updatedAt: Date;
 }

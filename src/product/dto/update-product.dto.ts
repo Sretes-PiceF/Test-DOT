@@ -1,11 +1,12 @@
 // create-product.dto.ts
 import { IsString, IsNumber, IsNotEmpty, Min, IsOptional } from 'class-validator';
 
-export class CreateProductDto {
+export class UpdateProductDto {
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     product_name: string;          // Wajib, harus string
 
+    @IsOptional()
     @IsNumber()
     @Min(0)                        // Harga tidak boleh negatif
     product_price: number;         // Wajib, harus number
@@ -16,6 +17,6 @@ export class CreateProductDto {
     product_stock?: number;        // Default 0 jika tidak diisi
 
     @IsString()
-    @IsNotEmpty()
-    categories_id: string;         // Wajib, harus string
+    @IsOptional()
+    categories_id?: string;         // Wajib, harus string
 }

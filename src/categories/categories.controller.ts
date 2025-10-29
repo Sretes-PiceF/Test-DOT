@@ -9,7 +9,7 @@ import {
 import { JwtAuthGuard } from '../core/guards/jwt.guard';
 import { CategoriesService } from './categories.service';
 import { GetCategoriesDto } from './dto/get-categories.dto';
-import { CreateCategoryDto } from './dto/update-categories.dto';
+import { CreateCategoriesDto } from './dto/create-categories.dto';
 
 @Controller('categories')
 @UseGuards(JwtAuthGuard) // ← Gantikan manual verifyToken()
@@ -50,7 +50,7 @@ export class CategoriesController {
 
     // POST /products
     @Post()
-    async createCategory(@Body() body: CreateCategoryDto) {
+    async createCategory(@Body() body: CreateCategoriesDto) {
         const category = await this.categoriesService.createCategories(body);
         return {
             success: true,

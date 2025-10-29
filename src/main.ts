@@ -1,25 +1,14 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common'; // <-- Pastikan ini diimpor
 
-// Modules
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { CategoriesModule } from './categories/categories.module';
-import { ProductModule } from './product/product.module';
-
-@Module({
-  imports: [
-    ConfigModule.forRoot(),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '24h' },
-    }),
-    AuthModule,
-    UserModule,
-    CategoriesModule,
-    ProductModule,
-  ],
-})
-export class AppModule { }
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  // Tambahkan ini:
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true, // Opsional: Hapus properti asing
+    transform: true, // Opsional: Mengubah tipe payload menjadi tipe DTO
+  }));
+  await app.listen(3001);
+}
+bootstrap();

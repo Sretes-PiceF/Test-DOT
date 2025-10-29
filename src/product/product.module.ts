@@ -2,15 +2,13 @@ import { Module } from '@nestjs/common';
 import { ProductsController } from './product.controller';
 import { ProductsService } from './product.service';
 import { PrismaService } from '../core/prisma.service'; // pastikan path sesuai
-import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '../auth/jwt.strategy'; // kalau kamu punya strategy JWT
+import { AuthModule } from '../auth/auth.module';
+
 
 @Module({
     imports: [
-        JwtModule.register({
-            secret: process.env.JWT_SECRET || 'defaultSecretKey',
-            signOptions: { expiresIn: '1d' },
-        }),
+        AuthModule,
     ],
     controllers: [ProductsController],
     providers: [ProductsService, PrismaService, JwtStrategy],
