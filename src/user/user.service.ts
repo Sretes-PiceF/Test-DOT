@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../core/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -32,12 +32,30 @@ export class UserService {
     }
 
     async update(id: number, dto: UpdateUserDto) {
+        // Cek apakah semua field wajib ada
+        const requiredFields = ['name', 'email', 'password']; // sesuaikan dengan field yang wajib diupdate
+
+        for (const field of requiredFields) {
+            if (dto[field] === undefined || dto[field] === null || dto[field] === '') {
+                throw new BadRequestException(
+                    `Field "${field}" wajib diisi untuk permintaan PUT (update penuh).`
+                );
+            }
+        }
+
+        // Hash password jika ada
         const data: any = { ...dto };
         if (dto.password) {
             data.password = await bcrypt.hash(dto.password, 10);
         }
-        return this.prisma.user.update({ where: { id }, data });
+
+        // Jalankan update
+        return this.prisma.user.update({
+            where: { id },
+            data,
+        });
     }
+
 
     async delete(id: number) {
         return this.prisma.user.delete({ where: { id } });

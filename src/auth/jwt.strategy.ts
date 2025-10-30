@@ -1,31 +1,40 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { PrismaService } from '../core/prisma.service'; // Wajib ada
+
+// Interface untuk payload yang sudah kita masukkan securityStamp
+interface JwtPayload {
+    userId: number;
+    email: string;
+    securityStamp: string; // ⭐ Stamp yang ada di token
+}
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(private authService: AuthService) {
+    constructor(private prisma: PrismaService) { // Inject PrismaService
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
+            ignoreExpiration: false, // Biarkan JWT service menangani kedaluwarsa 24 jam ('1d')
             secretOrKey: process.env.JWT_SECRET as string,
-            passReqToCallback: true,
         });
     }
 
-    async validate(req: any, payload: any) {
-        const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    // Payload sudah dijamin valid (tidak expired, signature benar) oleh super()
+    async validate(payload: JwtPayload) {
+        // 1. Ambil data user dari database
+        const user = await this.prisma.user.findUnique({
+            where: { id: payload.userId }
+        });
 
-        // Cek apakah token di blacklist
-        const isValid = await this.authService.validateToken(token as string);
-        if (!isValid) {
-            throw new UnauthorizedException('Token is invalid or blacklisted');
+        // 2. Cek apakah user ada DAN Stamp di token cocok dengan Stamp terbaru di database
+        if (!user || user.securityStamp !== payload.securityStamp) {
+            // ⭐ Stamp tidak cocok -> Token ini adalah token lama/sudah di-invalidasi
+            throw new UnauthorizedException('Token has been revoked by a new login or explicit logout.');
         }
 
-        return {
-            userId: payload.userId,
-            email: payload.email
-        };
+        // 3. Token valid (tidak expired, tidak revoked)
+        const { password, ...result } = user;
+        return result;
     }
 }

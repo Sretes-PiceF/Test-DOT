@@ -6,7 +6,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { PrismaService } from '../core/prisma.service';
 import { UserModule } from '../user/user.module';
-import { TokenBlacklistService } from '../auth/service/token-blacklist.service';
+// Hapus import TokenBlacklistService
 
 @Module({
     imports: [
@@ -14,16 +14,16 @@ import { TokenBlacklistService } from '../auth/service/token-blacklist.service';
         PassportModule,
         JwtModule.register({
             secret: process.env.JWT_SECRET,
-            signOptions: { expiresIn: '1d' },
+            signOptions: { expiresIn: '1d' }, // ⭐ Token Hangus setelah 24 Jam
         }),
     ],
     providers: [
         AuthService,
         JwtStrategy,
         PrismaService,
-        TokenBlacklistService
+        // Hapus TokenBlacklistService dari providers
     ],
     controllers: [AuthController],
-    exports: [AuthService, JwtStrategy, PassportModule], // ✅ Export yang diperbolehkan
+    exports: [AuthService, JwtStrategy, PassportModule],
 })
 export class AuthModule { }

@@ -1,25 +1,29 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
 import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { JwtStrategy } from './jwt.strategy';
 import { PrismaService } from '../core/prisma.service';
-import { TokenBlacklistService } from '../auth/service/token-blacklist.service';
+import { UserModule } from '../user/user.module';
+// Hapus import TokenBlacklistService
 
 @Module({
     imports: [
+        UserModule,
         PassportModule,
         JwtModule.register({
             secret: process.env.JWT_SECRET,
-            signOptions: { expiresIn: '1d' },
+            signOptions: { expiresIn: '1d' }, // ⭐ Token Hangus setelah 24 Jam
         }),
     ],
     providers: [
-        JwtStrategy,
         AuthService,
+        JwtStrategy,
         PrismaService,
-        TokenBlacklistService
+        // Hapus TokenBlacklistService dari providers
     ],
-    exports: [JwtModule, PassportModule, JwtStrategy],
+    controllers: [AuthController],
+    exports: [AuthService, JwtStrategy, PassportModule],
 })
-export class JwtAuthModule { }
+export class AuthModule { }

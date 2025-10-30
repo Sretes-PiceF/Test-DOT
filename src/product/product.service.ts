@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../core/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto'; // harus dibuat
+import { Product } from '@prisma/client';
 
 @Injectable()
 export class ProductsService {
@@ -39,8 +40,8 @@ export class ProductsService {
     }
 
     // POST /Product
-    async createProduct(data: CreateProductDto) {
-        return this.prisma.product.create({
+    async createProduct(data: CreateProductDto): Promise<Product> {
+        const product = await this.prisma.product.create({
             data: {
                 product_name: data.product_name,
                 product_price: data.product_price,
@@ -48,6 +49,7 @@ export class ProductsService {
                 categories_id: data.categories_id,
             },
         });
+        return product;
     }
 
     // GET /Product/:id

@@ -50,8 +50,8 @@ export class ProductsController {
 
     // POST /Product
     @Post()
-    async createProduct(@Body() body: CreateProductDto) {
-        const product = await this.productsService.createProduct(body);
+    async createProduct(@Body() CreateProductDto: CreateProductDto) {
+        const product = await this.productsService.createProduct(CreateProductDto);
         return {
             success: true,
             message: 'Product created successfully',
