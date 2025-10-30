@@ -4,9 +4,11 @@
 
 Disclaimer ini hanya project mini tetapi bila mana membantu anda dalam mengerjakan project anda terimakasih telah datang ke repo ini. Saya akan jelaskan mengapa saya memilih untuk menggunakan pattern ini adalah agar memudahkan programmer untuk membuat request dan mentesting data agar sesuai dengan standar industri saat ini.
 
-![Logo](./backend/public/images/Dot.png)
+Alasan utama saya menggunakan pola ini adalah untuk memastikan skalabilitas dan kemudahan pemeliharaan aplikasi. Daripada mengelompokkan semua controllers di satu folder atau semua services di folder lain (yang akan menjadi besar dan rumit), saya memilih untuk mengelompokkannya berdasarkan fitur atau domain bisnis, seperti auth dan product. Ini membuat kode lebih terisolasi, lebih mudah dipahami oleh anggota tim baru, dan memungkinkan kami untuk bekerja pada fitur yang berbeda secara paralel tanpa banyak konflik.
 
-=======
+![Logo](./public/images/Dot.png)
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -30,7 +32,7 @@ Disclaimer ini hanya project mini tetapi bila mana membantu anda dalam mengerjak
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Deskripsi
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
@@ -38,6 +40,16 @@ Disclaimer ini hanya project mini tetapi bila mana membantu anda dalam mengerjak
 
 ```bash
 $ npm install
+```
+
+## Dokumentasi RestFull API
+[linknya di proses](https://postman) Link nya masih di proses akun terkendala di blokir sementara untuk mempublish hasil Restfull API Silahkan tunggu update beberapa saat.
+
+## .ENV
+```bash
+DATABASE_URL="postgresql://(username):(passowrd)@localhost:(port)/(nama database)"
+JWT_SECRET=your-super-secret-key-at-least-32-characters-long
+PORT=(Port Running Project)
 ```
 
 ## Compile and run the project

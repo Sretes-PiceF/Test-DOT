@@ -7,7 +7,7 @@ import { PrismaService } from '../core/prisma.service'; // Wajib ada
 interface JwtPayload {
     userId: number;
     email: string;
-    securityStamp: string; // ⭐ Stamp yang ada di token
+    securityStamp: string; // Stamp yang ada di token
 }
 
 @Injectable()

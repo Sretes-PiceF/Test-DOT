@@ -104,7 +104,7 @@ export class AuthService {
                 throw new UnauthorizedException('Invalid token');
             }
 
-            // ⭐ LOGIC BARU UNTUK LOGOUT: Update Security Stamp
+            // LOGIC BARU UNTUK LOGOUT: Update Security Stamp
             await this.prisma.user.update({
                 where: { id: decoded.userId },
                 data: { securityStamp: uuidv4() }, // Ganti stamp, ini akan meng-invalidasi token saat ini
