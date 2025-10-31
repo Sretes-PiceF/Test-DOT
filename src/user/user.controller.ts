@@ -16,58 +16,58 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
-    // 🔹 GET /users
+    // 🔹 GET /user
     @Get()
     async findAll() {
         const users = await this.userService.findAll();
         return {
             success: true,
-            message: 'All users retrieved successfully',
+            message: 'Seluruh data telah berhasil diambil',
             data: users,
         };
     }
 
-    // 🔹 GET /users/:id
+    // 🔹 GET /user/:id
     @Get(':id')
     async findOne(@Param('id') id: number) {
         const user = await this.userService.findOne(Number(id));
         if (!user) throw new NotFoundException('User not found');
         return {
             success: true,
-            message: 'User retrieved successfully',
+            message: 'Data User telah terlihat',
             data: user,
         };
     }
 
-    // 🔹 POST /users
+    // 🔹 POST /user
     @Post()
     async create(@Body() dto: CreateUserDto) {
         const user = await this.userService.create(dto);
         return {
             success: true,
-            message: 'User created successfully',
+            message: 'Data User berhasil dibuat',
             data: user,
         };
     }
 
-    // 🔹 PUT /users/:id
+    // 🔹 PUT /user/:id
     @Put(':id')
     async update(@Param('id') id: number, @Body() dto: UpdateUserDto) {
         const updated = await this.userService.update(Number(id), dto);
         return {
             success: true,
-            message: 'User updated successfully',
+            message: 'Data User telah terubah',
             data: updated,
         };
     }
 
-    // 🔹 DELETE /users/:id
+    // 🔹 DELETE /user/:id
     @Delete(':id')
     async delete(@Param('id') id: number) {
         await this.userService.delete(Number(id));
         return {
             success: true,
-            message: 'User deleted successfully',
+            message: 'Data User telah terhapus',
         };
     }
 }

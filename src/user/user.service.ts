@@ -20,6 +20,7 @@ export class UserService {
         return this.prisma.user.findUnique({ where: { email } });
     }
 
+    // Logika Create
     async create(dto: CreateUserDto) {
         const hashedPassword = await bcrypt.hash(dto.password, 10);
         return this.prisma.user.create({
@@ -31,6 +32,7 @@ export class UserService {
         });
     }
 
+    // Logika Update
     async update(id: number, dto: UpdateUserDto) {
         // Cek apakah semua field wajib ada
         const requiredFields = ['name', 'email', 'password']; // sesuaikan dengan field yang wajib diupdate
@@ -56,7 +58,7 @@ export class UserService {
         });
     }
 
-
+    // Logika delete
     async delete(id: number) {
         return this.prisma.user.delete({ where: { id } });
     }

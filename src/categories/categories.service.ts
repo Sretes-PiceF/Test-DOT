@@ -47,7 +47,7 @@ export class CategoriesService {
             where: { categories_id: id },
         });
         if (!category) {
-            throw new Error('Category not found');
+            throw new Error('Data ini tidak ditemukan');
         }
         return category;
     }
@@ -55,7 +55,7 @@ export class CategoriesService {
     async updateCategories(id: string, data: UpdateCategoriesDto) {
         const existing = await this.prisma.categories.findUnique({ where: { categories_id: id } });
         if (!existing) {
-            throw new Error('Category not found');
+            throw new Error('Data ini tidak ditemukan');
         }
 
         return this.prisma.categories.update({
@@ -69,7 +69,7 @@ export class CategoriesService {
     async deleteCategories(id: string) {
         const existing = await this.prisma.categories.findUnique({ where: { categories_id: id } });
         if (!existing) {
-            throw new Error('Category not found');
+            throw new Error('Data ini tidak ditemukan');
         }
         return this.prisma.categories.delete({ where: { categories_id: id } });
     }

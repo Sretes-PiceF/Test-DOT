@@ -20,7 +20,7 @@ import { GetProductDto } from './dto/get-product.dto'; // Akan dimodifikasi
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) { }
 
-    // GET /Product?search=abc
+    // GET /api/Product
     @Get()
     async getProduct(@Query() query: GetProductDto) {
         // HANYA ambil 'search'
@@ -32,34 +32,34 @@ export class ProductsController {
 
         return {
             success: true,
-            message: 'All products retrieved successfully',
+            message: 'Seluruh data berhasil diambil',
             data: products,
         };
     }
 
-    // GET /Product/:id
+    // GET /api/Product/:id
     @Get(':id')
     async getProductById(@Param('id') id: string) {
         const product = await this.productsService.getProductById(id);
         return {
             success: true,
-            message: 'Product retrieved successfully',
+            message: 'Data product telah terlihat',
             data: product,
         };
     }
 
-    // POST /Product
+    // POST /api/Product
     @Post()
     async createProduct(@Body() CreateProductDto: CreateProductDto) {
         const product = await this.productsService.createProduct(CreateProductDto);
         return {
             success: true,
-            message: 'Product created successfully',
+            message: 'Data product berhasil dibuat',
             data: product,
         };
     }
 
-    // PATCH /Product/:id
+    // PATCH /api/Product/:id
     @Patch(':id')
     async updateProduct(
         @Param('id') id: string,
@@ -68,18 +68,18 @@ export class ProductsController {
         const updatedProduct = await this.productsService.updateProduct(id, body);
         return {
             success: true,
-            message: 'Product updated successfully',
+            message: 'Data product telah terubah',
             data: updatedProduct,
         };
     }
 
-    // DELETE /Product/:id
+    // DELETE /api/Product/:id
     @Delete(':id')
     async deleteProduct(@Param('id') id: string) {
         await this.productsService.deleteProduct(id);
         return {
             success: true,
-            message: 'Product deleted successfully',
+            message: 'Data product telah terhapus',
         };
     }
 }

@@ -4,7 +4,7 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/core/prisma.service';
 
-describe('Product E2E dengan Auth (Data Persisted)', () => {
+describe('Product E2E dengan Auth', () => {
     let app: INestApplication;
     let prisma: PrismaService;
     let accessToken: string;
@@ -14,7 +14,7 @@ describe('Product E2E dengan Auth (Data Persisted)', () => {
     const TEST_USER = {
         email: 'product.test.persisted@example.com',
         password: 'password123',
-        name: 'Product Test User Persisted',
+        name: 'Test Akun user dengan Product',
     };
 
     const CATEGORY_NAME = 'Kategori Uji Coba Persisted';
@@ -77,7 +77,7 @@ describe('Product E2E dengan Auth (Data Persisted)', () => {
                 .post(PRODUCT_ROUTE)
                 .set('Authorization', `Bearer ${accessToken}`)
                 .send({
-                    product_name: 'Test Product Persisted ' + Date.now(),
+                    product_name: 'Ini data yang baru dibuat' + Date.now(),
                     product_price: 100,
                     product_stock: 10,
                     categories_id: categoryId,
@@ -93,7 +93,7 @@ describe('Product E2E dengan Auth (Data Persisted)', () => {
         it('Perlu Token yang valid untuk mengubah data (Success 200)', async () => {
             if (!createdProductId) return;
 
-            const updatedName = 'Updated Test Product Persisted ' + Date.now();
+            const updatedName = 'Ini data yang telah terupdate';
             const response = await request(app.getHttpServer())
                 .patch(`${PRODUCT_ROUTE}/${createdProductId}`)
                 .set('Authorization', `Bearer ${accessToken}`)

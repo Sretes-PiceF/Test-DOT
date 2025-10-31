@@ -15,12 +15,12 @@ import { GetCategoriesDto } from './dto/get-categories.dto';
 import { CreateCategoriesDto } from './dto/create-categories.dto';
 import { UpdateCategoriesDto } from './dto/update-categories.dto';
 
-@Controller('categories')
+@Controller('Categories')
 @UseGuards(JwtAuthGuard) // ← Gantikan manual verifyToken()
 export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) { }
 
-    // GET /products?page=1&limit=10&search=abc
+    // GET /api/Categories
     @Get()
     async getCategories(@Query() query: GetCategoriesDto) {
         const search = query.search || '';
@@ -29,34 +29,36 @@ export class CategoriesController {
 
         return {
             success: true,
-            message: 'Categories retrieved successfully',
+            message: 'Seluruh data berhasil diambil',
             data: {
                 categories,
             },
         };
     }
 
+    // GET /api/Categories/:id
     @Get(':id')
     async getCategoriesById(@Param('id') id: string) {
         const category = await this.categoriesService.getCategoriesById(id);
         return {
             success: true,
-            message: 'Category retrieved successfully',
+            message: 'Data categories telah terlihat',
             data: category,
         };
     }
 
-    // POST /products
+    // POST /api/Categories
     @Post()
     async createCategory(@Body() body: CreateCategoriesDto) {
         const category = await this.categoriesService.createCategories(body);
         return {
             success: true,
-            message: 'Categories created successfully',
+            message: 'Data categories berhasil dibuat',
             data: category,
         };
     }
 
+    // PATCH /api/Categories/:id
     @Patch(':id')
     async updateCategory(
         @Param('id') id: string,
@@ -65,17 +67,18 @@ export class CategoriesController {
         const category = await this.categoriesService.updateCategories(id, body);
         return {
             success: true,
-            message: 'Category updated successfully',
+            message: 'Data categories telah terubah',
             data: category,
         };
     }
 
+    // DELETE /api/Categories/:id
     @Delete(':id')
     async deleteCategory(@Param('id') id: string) {
         await this.categoriesService.deleteCategories(id);
         return {
             success: true,
-            message: 'Category deleted successfully',
+            message: 'Data categories telah terhapus',
         };
     }
 }
