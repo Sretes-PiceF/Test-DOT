@@ -59,7 +59,7 @@ export class ProductsService {
             include: { categories: true },
         });
 
-        if (!product) throw new NotFoundException('Product not found');
+        if (!product) throw new NotFoundException('Data ini tidak ditemukan');
         return product;
     }
 
