@@ -43,7 +43,7 @@ $ npm install
 ```
 
 ## Dokumentasi RestFull API
-[linknya di proses](https://postman) Link nya masih di proses akun terkendala di blokir sementara untuk mempublish hasil Restfull API Silahkan tunggu update beberapa saat.
+[link dokumentasi](https://app.swaggerhub.com/apis-docs/jakarta/dokumentasi-rest-api-backend/1.0.0) Silahkan untuk melihat dokumentasi REstfull API disini saya telah membuat route dengan method yang berfungsi dengan baik saat testing data.
 
 ## .ENV
 ```bash
