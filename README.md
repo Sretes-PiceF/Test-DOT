@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # Test DOT Backend(Typescript + Nest JS 11)
 
 Disclaimer:
