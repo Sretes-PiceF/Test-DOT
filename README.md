@@ -2,9 +2,24 @@
 
 # Test DOT Backend(Typescript + Nest JS 11)
 
-Disclaimer ini hanya project mini tetapi bila mana membantu anda dalam mengerjakan project anda terimakasih telah datang ke repo ini. Saya akan jelaskan mengapa saya memilih untuk menggunakan pattern ini adalah agar memudahkan programmer untuk membuat request dan mentesting data agar sesuai dengan standar industri saat ini.
+Disclaimer:
+Proyek ini merupakan project mini yang dikembangkan untuk tujuan pembelajaran dan demonstrasi konsep arsitektur backend modern.
+Namun, bila mana proyek ini dapat membantu Anda dalam mengerjakan sistem Anda sendiri — saya ucapkan terima kasih telah mengunjungi repository ini 🙏
 
-Alasan utama saya menggunakan pola ini adalah untuk memastikan skalabilitas dan kemudahan pemeliharaan aplikasi. Daripada mengelompokkan semua controllers di satu folder atau semua services di folder lain (yang akan menjadi besar dan rumit), saya memilih untuk mengelompokkannya berdasarkan fitur atau domain bisnis, seperti auth dan product. Ini membuat kode lebih terisolasi, lebih mudah dipahami oleh anggota tim baru, dan memungkinkan kami untuk bekerja pada fitur yang berbeda secara paralel tanpa banyak konflik.
+Saya memilih untuk menggunakan pola Feature-Driven Domain Architecture (berbasis Domain-Driven Design) karena pendekatan ini memudahkan programmer dalam membuat request dan melakukan pengujian data agar lebih terstruktur serta sesuai dengan standar industri saat ini.
+
+Alasan utama saya menggunakan pola ini adalah untuk memastikan skalabilitas, kemudahan pemeliharaan, dan keterbacaan kode.
+Daripada mengelompokkan semua controller di satu folder dan semua service di folder lain (yang cenderung membesar dan sulit dikelola seiring waktu), saya memilih untuk mengelompokkan kode berdasarkan fitur atau domain bisnis, seperti auth, product, dan categories.
+
+Pendekatan ini membuat kode menjadi:
+
+Lebih terisolasi antar fitur,
+
+Lebih mudah dipahami oleh anggota tim baru,
+
+Dan memungkinkan pengembangan fitur secara paralel tanpa banyak konflik antar bagian.
+
+Dengan demikian, arsitektur berbasis domain ini membantu menjaga konsistensi struktur kode sekaligus meningkatkan produktivitas tim pengembang.
 
 ![Logo](./public/images/Dot.png)
 
