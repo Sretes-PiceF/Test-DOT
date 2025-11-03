@@ -56,7 +56,7 @@ $ npm install
 ```
 
 ## Dokumentasi RestFull API
-[link dokumentasi](https://app.swaggerhub.com/apis-docs/jakarta/dokumentasi-rest-api-backend/1.0.0) Silahkan untuk melihat dokumentasi REstfull API disini saya telah membuat route dengan method yang berfungsi dengan baik saat testing data.
+[link dokumentasi](https://app.swaggerhub.com/apis-docs/jakarta/DokumentasiRestFullApi/1.0.0) Silahkan untuk melihat dokumentasi REstfull API disini saya telah membuat route dengan method yang berfungsi dengan baik saat testing data.
 
 ## .ENV
 ```bash
